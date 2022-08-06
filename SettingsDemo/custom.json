@@ -1,0 +1,5 @@
+﻿{
+  "MainSettings": {
+    "SubSetting": "This is a sub-setting in custom.json"
+  }
+}

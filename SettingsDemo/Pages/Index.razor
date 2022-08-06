@@ -1,0 +1,44 @@
+﻿@page "/"
+@inject IConfiguration Config
+@inject IOptions<EmailSettingsOptions> EmailSettingsOptions
+
+<PageTitle>Index</PageTitle>
+
+<h1>Settings Demo</h1>
+
+<p>MySetting: @mySetting</p>
+
+<p>SubSetting: @mySubSetting</p>
+
+<p>SubSubSetting: @mySubSubSetting</p>
+
+<p>Connection String: @connectionString</p>
+
+<p>
+    Is Email Sending Enabled? @(emailSettings.EnableSending ? "Yes" : "No")<br/>
+    Timeout In Seconds: @emailSettings.TimeoutInSeconds<br/>
+    SMTP Servers: 
+    @foreach (var smtpServer in emailSettings.SmtpServers)
+    {
+        @(smtpServer + " ")
+    }<br/>
+    Administator: @emailSettings.EmailAdmin.FirstName @emailSettings.EmailAdmin.LastName
+</p>
+
+@code
+{
+    string mySetting = string.Empty;
+    string mySubSetting = string.Empty;
+    string mySubSubSetting = string.Empty;
+    string connectionString = string.Empty;
+    EmailSettingsOptions emailSettings = new();
+
+    protected override void OnInitialized()
+    {
+        mySetting = Config.GetValue<string>("MySetting"); 
+        mySubSetting = Config.GetValue<string>("MainSettings:SubSetting");
+        mySubSubSetting = Config.GetValue<string>("MainSettings:SubSection:SubSubSetting");
+        connectionString = Config.GetConnectionString("DefaultConnection");
+        emailSettings = EmailSettingsOptions.Value;
+    }
+}
